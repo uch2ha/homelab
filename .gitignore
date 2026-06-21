@@ -1,0 +1,5 @@
+# global
+*.env*
+private/*
+!*docker-compose.yaml
+!*.env.example*
