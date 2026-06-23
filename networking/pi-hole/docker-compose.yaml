@@ -1,0 +1,26 @@
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:2026.06.0
+    restart: unless-stopped
+    ports:
+      # DNS Ports
+      - '53:53/tcp'
+      - '53:53/udp'
+      # Default HTTP(s) Port
+      - '8080:80/tcp'
+      - '8443:443/tcp'
+    environment:
+      TZ: 'Europe/Helsinki'
+      FTLCONF_webserver_api_password: '${PIHOLE_WEBSERVER_API_PASSWORD}'
+      FTLCONF_dns_listeningMode: 'ALL'
+      FTLCONF_dns_upstreams: '1.1.1.1;8.8.8.8'
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    networks:
+      - homelab_shared
+
+networks:
+  homelab_shared:
+    external: true

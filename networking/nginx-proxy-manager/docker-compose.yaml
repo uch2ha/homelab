@@ -1,0 +1,18 @@
+services:
+  nginx-proxy-manager:
+    container_name: nginx-proxy-manager
+    image: 'docker.io/jc21/nginx-proxy-manager:2.15.1'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - homelab_shared
+
+networks:
+  homelab_shared:
+    external: true

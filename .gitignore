@@ -1,5 +1,11 @@
+# NPM
+networking/nginx-proxy-manager/*
+
+# pi-hole
+networking/pi-hole/*
+
 # global
 *.env*
 private/*
 !*docker-compose.yaml
-!*.env.example*
+!*.env.example

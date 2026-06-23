@@ -1,0 +1,23 @@
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:2.39.3
+    restart: always
+    ports:
+      - 9443:9443
+      # - 8000:8000  # Remove if you do not intend to use Edge Agents
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - homelab_shared
+
+volumes:
+  portainer_data:
+    name: portainer_data
+
+networks:
+  default:
+    name: portainer_network
+  homelab_shared:
+    external: true

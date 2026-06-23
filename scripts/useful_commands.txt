@@ -1,0 +1,30 @@
+# off gui
+sudo systemctl set-default multi-user.target && sudo reboot
+
+# on gui
+sudo systemctl set-default graphical.target && sudo reboot
+
+# wifi
+nmcli radio wifi off (on)
+
+### external disks handling
+
+# remove && create 1 partition
+sudo umount /dev/x(1,2,3)
+sudo fdisk /dev/x -> d 1, d 2, d 3, d n w # delete partitions
+sudo fdisk /dev/sdc -> n 1 enter enter w # create new partition
+
+# format
+sudo umount /dev/x1
+sudo mkfs.ext4 -L "NAME-HERE" /dev/x1
+
+# mount points
+sudo mkdir -p /mnt/x-name
+sudo mount /dev/x1 /mnt/x-name
+lsblk -f | grep -E "x"
+
+# auto mount
+sudo blkid /dev/x1
+sudo nano /etc/fstab -> UUID=<UUID_FROM>  /mnt/x-name   ext4  defaults  0  2 (or 0 0)
+
+###
