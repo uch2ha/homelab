@@ -1,3 +1,9 @@
+# zerobyte
+infrastructure/zerobyte/*
+
+# immich
+media/immich/*
+
 # NPM
 networking/nginx-proxy-manager/*
 

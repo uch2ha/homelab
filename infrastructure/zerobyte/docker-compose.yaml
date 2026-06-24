@@ -1,0 +1,26 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.39
+    container_name: zerobyte
+    restart: unless-stopped
+    ports:
+      - '4096:4096'
+    environment:
+      - TZ=Europe/Helsinki
+      - BASE_URL='$BASE_URL'
+      - APP_SECRET='$APP_SECRET' # `openssl rand -hex 32`
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./zerobyte:/var/lib/zerobyte
+      # read-only
+      - /home:/home:ro
+      - /mnt/hdd-main:/hdd-main:ro
+      # read-write
+      - /mnt/ssd-backup/home-backup:/home-backup
+      - /mnt/ssd-backup/immich-backup:/immich-backup
+    networks:
+      - homelab_shared
+
+networks:
+  homelab_shared:
+    external: true
