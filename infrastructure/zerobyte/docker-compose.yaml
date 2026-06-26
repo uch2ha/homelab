@@ -1,6 +1,6 @@
 services:
   zerobyte:
-    image: ghcr.io/nicotsx/zerobyte:v0.39
+    image: ghcr.io/nicotsx/zerobyte:${VERSION}
     container_name: zerobyte
     restart: unless-stopped
     ports:
@@ -14,11 +14,11 @@ services:
       - ./zerobyte:/var/lib/zerobyte
       # read-only
       - /home:/home:ro
-      - /mnt/hdd-main:/hdd-main:ro
+      - ${MAIN_1}:/hdd-main:ro
       # read-write
-      - /mnt/ssd-backup/home-backup:/home-backup
-      - /mnt/ssd-backup/immich-backup:/immich-backup
-      - /mnt/ssd-backup/papra-backup:/papra-backup
+      - ${BACKUP_1}/home-backup:/home-backup
+      - ${BACKUP_1}/immich-backup:/immich-backup
+      - ${BACKUP_1}/papra-backup:/papra-backup
     networks:
       - homelab_shared
 
