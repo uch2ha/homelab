@@ -18,6 +18,7 @@ services:
       # read-write
       - /mnt/ssd-backup/home-backup:/home-backup
       - /mnt/ssd-backup/immich-backup:/immich-backup
+      - /mnt/ssd-backup/papra-backup:/papra-backup
     networks:
       - homelab_shared
 

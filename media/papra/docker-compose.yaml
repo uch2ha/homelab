@@ -1,0 +1,19 @@
+services:
+  papra:
+    image: ghcr.io/papra-hq/papra:${VERSION}-rootless
+    container_name: papra
+    restart: unless-stopped
+    ports:
+      - 1221:1221
+    environment:
+      APP_BASE_URL: ${APP_BASE_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
+    volumes:
+      - ${APP_DATA}:/app/app-data
+    user: 1000:1000
+    networks:
+      - homelab_shared
+
+networks:
+  homelab_shared:
+    external: true
