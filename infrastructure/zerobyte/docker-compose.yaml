@@ -19,6 +19,7 @@ services:
       - ${BACKUP_1}/home-backup:/home-backup
       - ${BACKUP_1}/immich-backup:/immich-backup
       - ${BACKUP_1}/papra-backup:/papra-backup
+      - ${BACKUP_1}/vaultwarden-backup:/vaultwarden-backup
     networks:
       - homelab_shared
 

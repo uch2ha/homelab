@@ -1,0 +1,17 @@
+services:
+  vaultwarden:
+    container_name: vaultwarden
+    image: vaultwarden/server:${VERSION}
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - '${DATA}:/data/'
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - homelab_shared
+
+networks:
+  homelab_shared:
+    external: true
