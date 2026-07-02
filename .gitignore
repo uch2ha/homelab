@@ -1,3 +1,9 @@
+# uptime-kuma
+monitoring/uptime-kuma/*
+
+# vaultwarden
+infrastructure/vaultwarden/*
+
 # zerobyte
 infrastructure/zerobyte/*
 

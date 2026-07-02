@@ -1,0 +1,36 @@
+services:
+  dockhand:
+    container_name: dockhand
+    image: fnsys/dockhand:${VERSION}
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@dockhand-postgres:5432/${POSTGRES_DB}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dockhand_data:/app/data
+    depends_on:
+      - dockhand-postgres
+    networks:
+      - default
+      - homelab_shared
+
+  dockhand-postgres:
+    container_name: dockhand-postgres
+    image: postgres:16-alpine
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  dockhand_data:
+
+networks:
+  homelab_shared:
+    external: true
