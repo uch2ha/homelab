@@ -1,0 +1,81 @@
+- type: docker-containers
+  hide-header: true
+  hide-by-default: false
+  containers:
+    glance:
+      hide: true
+
+    # immich group
+    immich:
+      id: immich
+      name: immich
+      description: Photo and video storage
+      url: 'https://immich.${HOME_URL}'
+      icon: di:immich
+      hide: false
+    immich-postgres:
+      name: immich-postgres
+      parent: immich
+    immich-redis:
+      name: immich-redis
+      parent: immich
+    immich-machine-learning:
+      name: immich-machine-learning
+      parent: immich
+
+    # dockhand group
+    dockhand:
+      id: dockhand
+      name: dockhand
+      description: Container management
+      url: 'https://dockhand.${HOME_URL}'
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/dockhand.webp
+      hide: false
+    dockhand-postgres:
+      name: dockhand-postgres
+      parent: dockhand
+
+    netbird-client:
+      name: netbird-client
+      description: VPN client
+      url: 'https://netbird.${HOME_URL}'
+      icon: di:netbird
+
+    papra:
+      name: papra
+      description: Document storage
+      url: 'https://papra.${HOME_URL}'
+      icon: di:papra
+
+    vaultwarden:
+      name: vaultwarden
+      description: Password vault
+      url: 'https://vaultwarden.${HOME_URL}'
+      icon: di:vaultwarden
+
+    nginx-proxy-manager:
+      name: nginx-proxy-manager
+      description: Reverse proxy
+      url: 'https://npm.${HOME_URL}'
+      icon: di:nginx-proxy-manager
+
+    pihole:
+      name: pi-hole
+      description: Network DNS
+      url: 'https://pihole.${HOME_URL}'
+      icon: di:pi-hole
+
+    uptime-kuma:
+      name: uptime-kuma
+      description: Uptime monitoring
+      url: https://'uptime-kuma.${HOME_URL}'
+      icon: di:uptime-kuma
+
+    zerobyte:
+      name: zerobyte
+      description: Backups
+      url: 'https://zerobyte.${HOME_URL}'
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/zerobyte.svg
+
+    # private group
+    $include: private/docker-containers-private.yaml

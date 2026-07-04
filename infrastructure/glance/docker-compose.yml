@@ -1,0 +1,22 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance:${VERSION}
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config:/app/config
+      - ./assets:/app/assets
+      - ./widget:/app/widget
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home:/home:ro
+    ports:
+      - 8181:8080
+    env_file:
+      - .env
+    networks:
+      - homelab_shared
+
+networks:
+  homelab_shared:
+    external: true

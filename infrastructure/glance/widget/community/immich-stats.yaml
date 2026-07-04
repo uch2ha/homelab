@@ -1,0 +1,123 @@
+- type: custom-api
+  title: Immich
+  cache: 1h
+  url: ${IMMICH_URL}/api/server/statistics
+  headers:
+    x-api-key: ${IMMICH_KEY}
+    Accept: application/json
+  subrequests:
+    storage:
+      url: ${IMMICH_URL}/api/server/storage
+      headers:
+        x-api-key: ${IMMICH_KEY}
+        Accept: application/json
+  template: |
+    {{ $photos := .JSON.Int "photos" }}
+    {{ $videos := .JSON.Int "videos" }}
+    {{ $totalUsageBytes := .JSON.Int "usage" }}
+    {{ $totalUsageGiB := div ($totalUsageBytes | toFloat) 1073741824 }}
+
+    {{ $storage := .Subrequest "storage" }}
+    {{ $storage_ok := and (ge $storage.Response.StatusCode 200) (le $storage.Response.StatusCode 299) }}
+
+    {{ $yellowColorHex := "#eab308" }}
+    {{ $redColorHex := "#ef4444" }}
+
+    {{ $minDiskPercentForYellow := 50.0 }}
+    {{ $minDiskPercentForRed := 70.0 }}
+
+    {{ $minQuotaPercentForYellow := 70.0 }}
+    {{ $minQuotaPercentForRed := 87.5 }}
+
+    {{ $diskPercentValue := 0.0 }}
+    {{ $diskPercentText := "N/A" }}
+    {{ $diskPercentColor := "" }}
+    {{ if $storage_ok }}
+      {{ $diskPercentValue = $storage.JSON.Float "diskUsagePercentage" }}
+      {{ $diskPercentText = printf "%.1f%%" $diskPercentValue }}
+
+      {{ if gt $diskPercentValue $minDiskPercentForRed }}
+        {{ $diskPercentColor = $redColorHex }}
+      {{ else if gt $diskPercentValue $minDiskPercentForYellow }}
+        {{ $diskPercentColor = $yellowColorHex }}
+      {{ end }}
+    {{ end }}
+
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:3px;column-gap:10px;">
+      <div class="text-center">
+        <div class="color-highlight size-h3">{{ $photos | formatNumber }}</div>
+        <div class="size-h6">PHOTOS</div>
+      </div>
+
+      <div class="text-center">
+        <div class="color-highlight size-h3">{{ $videos | formatNumber }}</div>
+        <div class="size-h6">VIDEOS</div>
+      </div>
+
+      <div class="text-center">
+        <div class="color-highlight size-h3">{{ $totalUsageGiB | toInt | formatNumber }}GB</div>
+        <div class="size-h6">USAGE</div>
+      </div>
+
+      <div class="text-center">
+        <div class="color-highlight size-h3"{{ if ne $diskPercentColor "" }} style="color:{{ $diskPercentColor }};"{{ end }}>
+          {{ $diskPercentText }}
+        </div>
+        <div class="size-h6">DISK</div>
+      </div>
+
+      {{ range .JSON.Array "usageByUser" }}
+        {{ $userUsageBytes := .Int "usage" }}
+        {{ $quotaBytes := .Int "quotaSizeInBytes" }}
+        {{ $hasQuota := gt $quotaBytes 0 }}
+        {{ $quotaPercent := 0.0 }}
+        {{ $quotaPercentColor := "" }}
+        
+        {{ if $hasQuota }}
+          {{ $quotaPercent = mul (div ($userUsageBytes | toFloat) ($quotaBytes | toFloat)) 100.0 }}
+
+          {{ if gt $quotaPercent $minQuotaPercentForRed }}
+            {{ $quotaPercentColor = $redColorHex }}
+          {{ else if gt $quotaPercent $minQuotaPercentForYellow }}
+            {{ $quotaPercentColor = $yellowColorHex }}
+          {{ end }}
+        {{ end }}
+
+        <div class="text-center" style="padding-top:10px;">
+          <div class="size-h4 color-positive">
+            {{ .String "userName" }}
+          </div>
+        </div>
+
+        <div class="text-center" style="grid-column:2 / -1;">
+          <div>&nbsp;</div>
+        </div>
+
+        <div class="text-center">
+          <div class="color-highlight size-h3">{{ .Int "photos" | formatNumber }}</div>
+          <div class="size-h6">PHOTOS</div>
+        </div>
+
+        <div class="text-center">
+          <div class="color-highlight size-h3">{{ .Int "videos" | formatNumber }}</div>
+          <div class="size-h6">VIDEOS</div>
+        </div>
+
+        <div class="text-center">
+          <div class="color-highlight size-h3">{{ div ($userUsageBytes | toFloat) 1073741824 | toInt | formatNumber }}GB</div>
+          <div class="size-h6">USAGE</div>
+        </div>
+
+        <div class="text-center">
+          {{ if $hasQuota }}
+            <div class="color-highlight size-h3"{{ if ne $quotaPercentColor "" }} style="color:{{ $quotaPercentColor }};"{{ end }}>
+              {{ printf "%.1f" $quotaPercent }}%
+            </div>
+            <div class="size-h6">QUOTA</div>
+          {{ else }}
+            <div class="color-highlight size-h3">&nbsp;</div>
+            <div class="size-h6">&nbsp;</div>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>

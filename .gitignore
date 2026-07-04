@@ -18,6 +18,6 @@ networking/pi-hole/*
 
 # global
 *.env*
-private/*
+**/private/
 !*docker-compose.yaml
 !*.env.example

@@ -1,0 +1,6 @@
+- type: weather
+  hide-header: true
+  units: metric
+  hour-format: 24h
+  hide-location: true
+  location: Helsinki, Finland

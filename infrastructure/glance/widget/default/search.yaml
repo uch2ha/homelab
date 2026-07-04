@@ -1,0 +1,11 @@
+- type: search
+  hide-header: true
+  search-engine: perplexity
+  autofocus: true
+  bangs:
+    - title: Google
+      shortcut: '!g'
+      url: https://www.google.com/search?q={QUERY}
+    - title: YouTube
+      shortcut: '!yt'
+      url: https://www.youtube.com/results?search_query={QUERY}

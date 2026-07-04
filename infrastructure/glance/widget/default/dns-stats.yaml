@@ -1,0 +1,6 @@
+- type: dns-stats
+  hide-header: true
+  service: pihole-v6
+  url: ${DNS_STATS_URL}
+  username: ${DNS_STATS_USERNAME}
+  password: ${DNS_STATS_PASSWORD}

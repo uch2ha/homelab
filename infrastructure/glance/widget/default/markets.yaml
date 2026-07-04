@@ -1,0 +1,9 @@
+- type: markets
+  hide-header: true
+  markets:
+    - symbol: BTC-USD
+      name: Bitcoin
+      chart-link: https://www.tradingview.com/chart/?symbol=INDEX:BTCUSD
+    - symbol: RUB-USD
+      name: Russian Ruble
+      chart-link: https://www.tradingview.com/chart/?symbol=FX_IDC%3AUSDRUB

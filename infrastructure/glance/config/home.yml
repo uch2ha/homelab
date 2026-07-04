@@ -1,0 +1,37 @@
+- name: Home
+  columns:
+    - size: small
+      widgets:
+        - type: server-stats
+          hide-header: true
+          servers:
+            - type: local
+              name: Homelab
+              hide-mountpoints-by-default: true
+              mountpoints:
+                '/':
+                  name: Root
+                  hide: false
+                '/home':
+                  name: Home
+                  hide: false
+
+        - $include: ../widget/community/immich-stats.yaml
+
+        - $include: ../widget/community/papra-stats.yaml
+
+    - size: full
+      widgets:
+        - $include: ../widget/default/search.yaml
+
+        - $include: ../widget/default/docker-containers.yaml
+
+    - size: small
+      widgets:
+        - $include: ../widget/default/weather.yaml
+
+        - $include: ../widget/default/dns-stats.yaml
+
+        - $include: ../widget/community/uptime-kuma.yaml
+
+        # - $include: ../widget/default/markets.yaml
