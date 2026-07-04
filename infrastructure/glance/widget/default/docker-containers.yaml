@@ -35,6 +35,18 @@
       name: dockhand-postgres
       parent: dockhand
 
+    # beszel group
+    beszel:
+      id: beszel
+      name: beszel
+      description: Server monitoring
+      url: 'https://beszel.${HOME_URL}'
+      icon: di:beszel
+      hide: false
+    beszel-agent:
+      name: beszel-agent
+      parent: beszel
+
     netbird-client:
       name: netbird-client
       description: VPN client
@@ -49,7 +61,7 @@
 
     vaultwarden:
       name: vaultwarden
-      description: Password vault
+      description: Password manager
       url: 'https://vaultwarden.${HOME_URL}'
       icon: di:vaultwarden
 
@@ -67,7 +79,7 @@
 
     uptime-kuma:
       name: uptime-kuma
-      description: Uptime monitoring
+      description: Service uptime monitoring
       url: https://'uptime-kuma.${HOME_URL}'
       icon: di:uptime-kuma
 

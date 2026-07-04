@@ -1,7 +1,6 @@
 - type: search
   hide-header: true
   search-engine: perplexity
-  autofocus: true
   bangs:
     - title: Google
       shortcut: '!g'
