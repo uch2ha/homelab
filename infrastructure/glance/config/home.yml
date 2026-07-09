@@ -10,7 +10,7 @@
       widgets:
         - $include: ../widget/default/search.yaml
 
-        - $include: ../widget/community/beszel-server-stats.yaml
+        - $include: ../widget/community-refactored/beszel-server-stats.yaml
 
         - $include: ../widget/default/docker-containers.yaml
 
@@ -18,7 +18,7 @@
       widgets:
         - $include: ../widget/default/weather.yaml
 
-        - $include: ../widget/community/immich-stats.yaml
+        - $include: ../widget/community-refactored/immich-stats.yaml
 
         - $include: ../widget/community/papra-stats.yaml
 

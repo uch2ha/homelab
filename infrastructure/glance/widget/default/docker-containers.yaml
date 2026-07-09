@@ -50,7 +50,7 @@
     netbird-client:
       name: netbird-client
       description: VPN client
-      url: 'https://netbird.${HOME_URL}'
+      url: '${NETBIRD_URL}'
       icon: di:netbird
 
     papra:
@@ -80,7 +80,7 @@
     uptime-kuma:
       name: uptime-kuma
       description: Service uptime monitoring
-      url: https://'uptime-kuma.${HOME_URL}'
+      url: 'https://uptime-kuma.${HOME_URL}'
       icon: di:uptime-kuma
 
     zerobyte:
