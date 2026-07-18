@@ -68,9 +68,15 @@
 
         {{ if and ($system.Exists "info.la.0") (gt $logicalCpus 0.0) }}
           {{ $cpuLoad1m = div (mul ($system.Float "info.la.0") 100.0) $logicalCpus }}
+          {{ if gt $cpuLoad1m 100.0 }}
+            {{ $cpuLoad1m = 100.0 }}
+          {{ end }}
         {{ end }}
         {{ if and ($system.Exists "info.la.2") (gt $logicalCpus 0.0) }}
           {{ $cpuLoad15m = div (mul ($system.Float "info.la.2") 100.0) $logicalCpus }}
+          {{ if gt $cpuLoad15m 100.0 }}
+            {{ $cpuLoad15m = 100.0 }}
+          {{ end }}
         {{ end }}
 
         {{ $memoryUsedPercent := $system.Float "info.mp" }}
