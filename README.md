@@ -25,9 +25,9 @@ Two ways to access services:
 
 <table>
   <tr>
-    <td rowspan="2"><b>Infrastructure</b></td>
-    <td>System backups</td>
-    <td>ZeroByte</td>
+    <td rowspan="2" width="500px"><b>Infrastructure</b></td>
+    <td width="500px">System backups</td>
+    <td width="500px">ZeroByte</td>
   </tr>
   <tr>
     <td>Container dashboard</td>
@@ -53,7 +53,7 @@ Two ways to access services:
   </tr>
   <tr>
     <td rowspan="3"><b>Networking</b></td>
-    <td>Local DNS + blocking</td>
+    <td>Local DNS + ad-blocking</td>
     <td>Pi-hole</td>
   </tr>
   <tr>
