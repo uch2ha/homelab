@@ -1,23 +1,19 @@
-# beszel
-monitoring/beszel/*
-
-# uptime-kuma
-monitoring/uptime-kuma/*
-
-# vaultwarden
-infrastructure/vaultwarden/*
-
-# zerobyte
+# infrastructure
 infrastructure/zerobyte/*
 
-# immich
+# media
 media/immich/*
 
-# NPM
-networking/nginx-proxy-manager/*
+# monitoring
+monitoring/beszel/*
+monitoring/uptime-kuma/*
 
-# pi-hole
+# networking
+networking/nginx-proxy-manager/*
 networking/pi-hole/*
+
+# security
+security/vaultwarden/*
 
 # global
 *.env*
