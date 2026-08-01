@@ -5,8 +5,8 @@ services:
     restart: unless-stopped
     ports:
       # DNS Ports
-      - '53:53/tcp'
-      - '53:53/udp'
+      - '${PIHOLE_BIND_IP}:53:53/tcp'
+      - '${PIHOLE_BIND_IP}:53:53/udp'
       # Default HTTP(s) Port
       - '8080:80/tcp'
       - '8443:443/tcp'
