@@ -14,8 +14,6 @@ services:
       - ${EXTERNAL_LIBRARIES_LOCATION}:/archive:ro
     env_file:
       - .env
-    ports:
-      - '2283:2283'
     depends_on:
       - redis
       - database
@@ -24,7 +22,7 @@ services:
       disable: false
     networks:
       - default
-      - homelab_shared
+      - homelab_media
 
   immich-machine-learning:
     container_name: immich-machine-learning
@@ -71,5 +69,5 @@ volumes:
   model-cache:
 
 networks:
-  homelab_shared:
+  homelab_media:
     external: true

@@ -3,8 +3,6 @@ services:
     container_name: dockhand
     image: fnsys/dockhand:${VERSION}
     restart: unless-stopped
-    ports:
-      - 3000:3000
     env_file:
       - .env
     environment:
@@ -16,7 +14,7 @@ services:
       - dockhand-postgres
     networks:
       - default
-      - homelab_shared
+      - homelab_infrastructure
 
   dockhand-postgres:
     container_name: dockhand-postgres
@@ -28,9 +26,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
   dockhand_data:
+  postgres_data:
 
 networks:
-  homelab_shared:
+  homelab_infrastructure:
     external: true

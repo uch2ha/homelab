@@ -3,13 +3,12 @@ services:
     container_name: pihole
     image: pihole/pihole:${VERSION}
     restart: unless-stopped
+    env_file:
+      - .env
     ports:
       # DNS Ports
       - '${PIHOLE_BIND_IP}:53:53/tcp'
       - '${PIHOLE_BIND_IP}:53:53/udp'
-      # Default HTTP(s) Port
-      - '8080:80/tcp'
-      - '8443:443/tcp'
     environment:
       TZ: 'Europe/Helsinki'
       FTLCONF_webserver_api_password: '${PIHOLE_WEBSERVER_API_PASSWORD}'
@@ -19,8 +18,8 @@ services:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
     networks:
-      - homelab_shared
+      - homelab_networking
 
 networks:
-  homelab_shared:
+  homelab_networking:
     external: true

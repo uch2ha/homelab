@@ -10,8 +10,8 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - homelab_shared
+      - homelab_security
 
 networks:
-  homelab_shared:
+  homelab_security:
     external: true
