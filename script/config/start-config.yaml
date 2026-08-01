@@ -1,0 +1,24 @@
+action: 'up --pull never -d'
+
+base:
+  - infrastructure/zerobyte
+  - monitoring/uptime-kuma
+  - media/*
+  - networking/*
+  - security/*
+  - tool/*
+  - private/*
+
+groups:
+  docker-managment:
+    path: infrastructure
+    value: dockhand
+    presets:
+      dockhand: [dockhand]
+      portainer: [portainer]
+  monitoring:
+    path: monitoring
+    value: light
+    presets:
+      light: [beszel]
+      high: [grafana, prometheus, loki]
