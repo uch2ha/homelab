@@ -2,20 +2,28 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 MAIN='\e[38;5;75m'
 RED='\e[31m'
 GREEN='\e[32m'
 NC='\e[0m'
 
-_find_compose_files() {
-  find "$SCRIPT_DIR/.." -maxdepth 3 -name 'docker-compose.y*ml' -not -path '*/private/*' | sort
+find_compose_files() {
+  local rel
+  SELECTED_PATHS=()
+  while IFS= read -r rel; do
+    [ -z "$rel" ] && continue
+    SELECTED_PATHS+=("$ROOT_DIR/$rel")
+    printf '%s\n' "$rel"
+  done < <(find "$ROOT_DIR" -maxdepth 3 -name 'docker-compose.y*ml' -printf '%P\n' | sort | sed 's|/docker-compose\.y[a-z]*ml$||')
 }
 
-_run_one_service() {
-  local service_name="$1"
-  local service_dir="$2"
-  local action="$3"
+_run_action_for_one_service() {
+  local service_dir="$1"
+  local action="$2"
+  local service_name
+  service_name="$(basename "$service_dir")"
 
   echo -e "${MAIN}─── ${service_name}: docker compose ${action} ───${NC}"
 
@@ -30,24 +38,24 @@ _run_one_service() {
   return $exit_code
 }
 
-run_action() {
+run_action_for_services() {
   local action="$1"
+  shift
   local total=0 ok=0 failed=0
   local failed_services=""
 
-  while IFS= read -r compose_file; do
-    local service_dir service_name
-    service_dir="$(dirname "$compose_file")"
-    service_name="$(basename "$service_dir")"
+  for service_dir in "$@"; do
     total=$((total + 1))
 
-    if _run_one_service "$service_name" "$service_dir" "$action"; then
+    if _run_action_for_one_service "$service_dir" "$action"; then
       ok=$((ok + 1))
     else
       failed=$((failed + 1))
+      local service_name
+      service_name="$(basename "$service_dir")"
       failed_services="${failed_services}${failed_services:+, }${service_name}"
     fi
-  done < <(_find_compose_files)
+  done
 
   echo ""
   echo -e "${MAIN}──────────────────────────────────────${NC}"

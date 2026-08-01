@@ -15,6 +15,9 @@ networking/pi-hole/*
 # security
 security/vaultwarden/*
 
+# python
+__pycache__/
+
 # global
 *.env*
 **/private/
