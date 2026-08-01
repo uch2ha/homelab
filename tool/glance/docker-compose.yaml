@@ -5,6 +5,12 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    healthcheck:
+      test: wget --spider http://localhost:8080/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./config:/app/config
