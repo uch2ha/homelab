@@ -22,9 +22,9 @@ groups: # toggle subsets of services
 ## Usage
 
 ```bash
-./script/start-services.sh      # runs base + selected group presets
-./script/stop-services.sh       # stops ALL discovered services
-./script/down-services.sh       # brings down ALL discovered services
+./script/container/start-services.sh      # runs base + selected group presets
+./script/container/stop-services.sh       # stops ALL discovered services
+./script/container/down-services.sh       # brings down ALL discovered services
 ```
 
 ## Base rules

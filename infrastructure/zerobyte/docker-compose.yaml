@@ -15,6 +15,7 @@ services:
       - TZ=Europe/Helsinki
       - BASE_URL='$BASE_URL'
       - APP_SECRET='$APP_SECRET' # `openssl rand -hex 32`
+      - WEBHOOK_ALLOWED_ORIGINS='$WEBHOOK_ALLOWED_ORIGINS'
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./zerobyte:/var/lib/zerobyte
