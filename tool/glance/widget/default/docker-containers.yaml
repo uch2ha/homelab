@@ -89,5 +89,14 @@
       url: 'https://zerobyte.${HOME_URL}'
       icon: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/zerobyte.svg
 
+    ntfy:
+      name: ntfy
+      description: Notification service
+      url: 'https://ntfy.${HOME_URL}'
+      icon: di:ntfy
+
     # private group
     $include: private/docker-containers-private.yaml
+#
+# icons: https://dashboardicons.com/ && https://selfh.st/icons/
+#
