@@ -70,9 +70,13 @@ Two ways to access services:
     <td>Vaultwarden</td>
   </tr>
   <tr>
-    <td><b>Tool</b></td>
+    <td rowspan="2"><b>Tool</b></td>
     <td>Homepage</td>
     <td>Glance</td>
+  </tr>
+  <tr>
+    <td>Notifications</td>
+    <td>Ntfy</td>
   </tr>
 </table>
 
@@ -84,7 +88,7 @@ Two ways to access services:
 
 #### Service
 
-- [ ] Add notification service
+- [x] Add notification service
 - [ ] DDNS setup
 
 #### Infrastructure
@@ -94,5 +98,5 @@ Two ways to access services:
 
 #### Automation
 
-- [ ] Add run/stop/down scripts
-- [ ] `config.yaml` for service orchestration (which services to start/stop)
+- [x] Add run/stop/down scripts
+- [x] `config.yaml` for service orchestration (which services to start/stop)
