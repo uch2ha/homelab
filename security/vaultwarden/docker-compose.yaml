@@ -1,17 +1,25 @@
 services:
   vaultwarden:
-    container_name: vaultwarden
     image: vaultwarden/server:${VERSION}
+    container_name: vaultwarden
     restart: unless-stopped
     environment:
       DOMAIN: ${DOMAIN}
     volumes:
       - '${DATA}:/data/'
+    healthcheck:
+      test: curl -f http://localhost:80/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - homelab_security
+    # ports:
+    #   - 80:80
     security_opt:
       - no-new-privileges:true
-    networks:
-      - homelab_shared
 
 networks:
-  homelab_shared:
+  homelab_security:
     external: true
