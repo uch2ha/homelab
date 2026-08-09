@@ -1,10 +1,8 @@
 services:
   dockhand:
-    container_name: dockhand
     image: fnsys/dockhand:${VERSION}
+    container_name: dockhand
     restart: unless-stopped
-    ports:
-      - 3000:3000
     env_file:
       - .env
     environment:
@@ -12,25 +10,39 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dockhand_data:/app/data
+    healthcheck:
+      test: curl -f http://localhost:3000/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     depends_on:
       - dockhand-postgres
     networks:
       - default
-      - homelab_shared
+      - homelab_infrastructure
+    # ports:
+    #   - 3000:3000
 
   dockhand-postgres:
-    container_name: dockhand-postgres
     image: postgres:16-alpine
+    container_name: dockhand-postgres
+    restart: unless-stopped
     env_file:
       - .env
-    restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER:-postgres} || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
-  postgres_data:
   dockhand_data:
+  postgres_data:
 
 networks:
-  homelab_shared:
+  homelab_infrastructure:
     external: true

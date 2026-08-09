@@ -91,7 +91,7 @@
 
     ntfy:
       name: ntfy
-      description: Notification service
+      description: Notifications
       url: 'https://ntfy.${HOME_URL}'
       icon: di:ntfy
 

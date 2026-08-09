@@ -1,8 +1,10 @@
 services:
   glance:
-    container_name: glance
     image: glanceapp/glance:${VERSION}
+    container_name: glance
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./config:/app/config
@@ -10,13 +12,17 @@ services:
       - ./widget:/app/widget
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home:/home:ro
-    ports:
-      - 8181:8080
-    env_file:
-      - .env
+    healthcheck:
+      test: wget --spider http://localhost:8080/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
-      - homelab_shared
+      - homelab_tool
+    # ports:
+    #   - 8080:8080
 
 networks:
-  homelab_shared:
+  homelab_tool:
     external: true

@@ -1,10 +1,11 @@
 services:
   ntfy:
-    container_name: ntfy
     image: binwiederhier/ntfy:${VERSION}
+    container_name: ntfy
     restart: unless-stopped
-    # ports:
-    #   - 80:80
+    command:
+      - serve
+    user: 1000:1000
     env_file:
       - .env
     environment:
@@ -12,9 +13,6 @@ services:
     volumes:
       - ./cache:/var/cache/ntfy
       - ./etc:/etc/ntfy
-    command:
-      - serve
-    user: 1000:1000
     healthcheck: # optional: remember to adapt the host:port to your environment
       test:
         [
@@ -25,10 +23,12 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    init: true # needed, if healthcheck is used. Prevents zombie processes
     networks:
-      - homelab_shared
+      - homelab_tool
+    init: true # needed, if healthcheck is used. Prevents zombie processes
+    # ports:
+    #   - 80:80
 
 networks:
-  homelab_shared:
+  homelab_tool:
     external: true
