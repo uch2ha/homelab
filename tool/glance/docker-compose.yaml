@@ -19,10 +19,10 @@ services:
       retries: 3
       start_period: 30s
     networks:
-      - homelab_common
+      - homelab_tool
     # ports:
     #   - 8080:8080
 
 networks:
-  homelab_common:
+  homelab_tool:
     external: true

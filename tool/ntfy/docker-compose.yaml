@@ -24,11 +24,11 @@ services:
       retries: 3
       start_period: 40s
     networks:
-      - homelab_shared
+      - homelab_tool
     init: true # needed, if healthcheck is used. Prevents zombie processes
     # ports:
     #   - 80:80
 
 networks:
-  homelab_shared:
+  homelab_tool:
     external: true
