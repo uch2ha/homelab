@@ -5,12 +5,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    healthcheck:
-      test: wget --spider http://localhost:4096/ || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
     environment:
       - TZ=Europe/Helsinki
       - BASE_URL='$BASE_URL'
@@ -26,8 +20,16 @@ services:
       - ${BACKUP_1}/home-backup:/home-backup
       - ${BACKUP_1}/immich-backup:/immich-backup
       - ${BACKUP_1}/papra-backup:/papra-backup
+    healthcheck:
+      test: wget --spider http://localhost:4096/ || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - homelab_infrastructure
+    ports:
+      - '4096:4096'
 
 networks:
   homelab_infrastructure:

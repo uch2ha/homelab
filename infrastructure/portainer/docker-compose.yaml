@@ -1,21 +1,23 @@
 services:
   portainer:
-    container_name: portainer
     image: portainer/portainer-ce:${VERSION}
+    container_name: portainer
     restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
     healthcheck:
       test: curl -f http://localhost:9000/ || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
     networks:
       - homelab_infrastructure
+    ports:
+      - 9443:9443
 
 volumes:
   portainer_data:

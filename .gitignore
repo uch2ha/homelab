@@ -15,6 +15,9 @@ networking/pi-hole/*
 # security
 security/vaultwarden/*
 
+# tool
+tool/ntfy/*
+
 # python
 __pycache__/
 
