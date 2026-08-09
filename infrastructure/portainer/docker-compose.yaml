@@ -16,8 +16,8 @@ services:
       start_period: 30s
     networks:
       - homelab_infrastructure
-    ports:
-      - 9443:9443
+    # ports:
+    #   - 9443:9443
 
 volumes:
   portainer_data:

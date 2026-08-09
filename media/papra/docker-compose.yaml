@@ -13,8 +13,8 @@ services:
       - ${APP_DATA}:/app/app-data
     networks:
       - homelab_media
-    ports:
-      - 1221:1221
+    # ports:
+    #   - 1221:1221
 
 networks:
   homelab_media:

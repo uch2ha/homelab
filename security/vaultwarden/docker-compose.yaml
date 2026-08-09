@@ -15,8 +15,8 @@ services:
       start_period: 30s
     networks:
       - homelab_security
-    ports:
-      - 80:80
+    # ports:
+    #   - 80:80
     security_opt:
       - no-new-privileges:true
 

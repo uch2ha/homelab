@@ -28,8 +28,8 @@ services:
       start_period: 30s
     networks:
       - homelab_infrastructure
-    ports:
-      - '4096:4096'
+    # ports:
+    #   - 4096:4096
 
 networks:
   homelab_infrastructure:

@@ -14,8 +14,8 @@ services:
       start_period: 30s
     networks:
       - homelab_monitoring
-    ports:
-      - 3001:3001
+    # ports:
+    #   - 3001:3001
 
 networks:
   homelab_monitoring:

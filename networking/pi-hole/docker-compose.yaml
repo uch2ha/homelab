@@ -25,6 +25,8 @@ services:
       # DNS Ports
       - '${PIHOLE_BIND_IP}:53:53/tcp'
       - '${PIHOLE_BIND_IP}:53:53/udp'
+      # Admin
+      # - 80:80
 
 networks:
   homelab_networking:

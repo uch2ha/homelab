@@ -25,9 +25,9 @@ services:
       start_period: 40s
     networks:
       - homelab_shared
-    ports:
-      - 80:80
     init: true # needed, if healthcheck is used. Prevents zombie processes
+    # ports:
+    #   - 80:80
 
 networks:
   homelab_shared:

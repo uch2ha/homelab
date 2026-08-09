@@ -21,8 +21,8 @@ services:
     networks:
       - default
       - homelab_infrastructure
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
 
   dockhand-postgres:
     image: postgres:16-alpine
