@@ -8,7 +8,6 @@ Personal homelab on a single server. Everything runs as Docker containers.
 - [Services](#services)
 - [Homepage](#homepage)
 - [Roadmap](#roadmap)
-- [Scripts](#scripts)
 
 ## Network Architecture
 
@@ -19,7 +18,7 @@ Two ways to access services:
 - **Local LAN**: device → Pi-hole local DNS → NPM (reverse proxy) → services
   - Full access to all services
 
-![Network Architecture](assets/screenshots/homelab-overview.png)
+![Network Architecture](assets/screenshots/homelab-overview.webp)
 
 ## Services
 
@@ -82,7 +81,7 @@ Two ways to access services:
 
 ## Homepage
 
-![Glance Homepage](assets/screenshots/homepage.png)
+![Glance Homepage](assets/screenshots/homepage.webp)
 
 ## Roadmap
 

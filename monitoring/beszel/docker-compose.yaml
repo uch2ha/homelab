@@ -10,8 +10,8 @@ services:
       - ./beszel_socket:/beszel_socket
     networks:
       - homelab_monitoring
-    # ports:
-    #   - 8090:8090
+    ports:
+      - 8090:8090
 
   beszel-agent:
     image: henrygd/beszel-agent:${VERSION}
