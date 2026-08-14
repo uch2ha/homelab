@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh Beszel token every Monday at 02:00
+
+[Timer]
+OnCalendar=Mon *-*-* 02:00:00
+Persistent=true
+Unit=beszel-token-refresh.service
+
+[Install]
+WantedBy=timers.target
