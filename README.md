@@ -13,7 +13,7 @@ Personal homelab on a single server. Everything runs as Docker containers.
 
 Two ways to access services:
 
-- **External Internet**: device → NetBird VPN client → NetBird VPN server → home network → NPM (reverse proxy) → services
+- **External Internet**: device with NetBird VPN client → NetBird VPN server → home network → NPM (reverse proxy) → services
   - Limited access by rights
 - **Local LAN**: device → Pi-hole local DNS → NPM (reverse proxy) → services
   - Full access to all services
