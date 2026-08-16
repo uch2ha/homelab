@@ -29,7 +29,7 @@ _run_action_for_one_service() {
   echo -e "${MAIN}─── ${service_name}: docker compose ${action} ───${NC}"
 
   set +e
-  (cd "$service_dir" && docker compose $action 2>&1)
+  (cd "$service_dir" && docker compose "$action" 2>&1)
   local exit_code=$?
   set -e
 

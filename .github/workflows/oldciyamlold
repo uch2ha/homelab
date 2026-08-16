@@ -1,0 +1,76 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build CI image
+        run: docker build -t homelab-ci script/ci
+
+      - name: Bash lint (every .sh in the repo)
+        run: >-
+          docker run --rm -v "${{ github.workspace }}:/repo" homelab-ci
+          bash -lc '
+          set -euo pipefail
+          git config --global --add safe.directory /repo
+          mapfile -t scripts < <(git -C /repo ls-files ":(glob)**/*.sh")
+          for s in "${scripts[@]}"; do
+            echo "== $s"
+            bash -n "/repo/$s"
+            (cd "$(dirname "/repo/$s")" && shellcheck -x -S warning "$(basename "/repo/$s")")
+          done
+          echo "shellcheck: ${#scripts[@]} script(s) passed"
+          '
+
+      - name: Python lint
+        run: >-
+          docker run --rm -v "${{ github.workspace }}:/repo" homelab-ci
+          bash -lc '
+          set -euo pipefail
+          git config --global --add safe.directory /repo
+          mapfile -t pys < <(git -C /repo ls-files ":(glob)**/*.py")
+          for p in "${pys[@]}"; do
+            echo "== $p"
+            python -m py_compile "/repo/$p"
+          done
+          ruff check --config /repo/ruff.toml /repo/script
+          '
+
+      - name: YAML syntax
+        run: >-
+          docker run --rm -v "${{ github.workspace }}:/repo" homelab-ci
+          python -c '
+          import glob, sys, yaml
+          bad = 0
+          files = [f for f in glob.glob("/repo/**/*.ya*ml", recursive=True)]
+          for f in sorted(files):
+              try:
+                  with open(f) as fh:
+                      list(yaml.safe_load_all(fh))
+              except yaml.YAMLError as e:
+                  print(f"YAML error in {f}: {e}")
+                  bad = 1
+          print(f"yaml: {len(files)} file(s) parsed")
+          sys.exit(bad)
+          '
+
+      - name: Homelab logic validation
+        run: docker run --rm -v "${{ github.workspace }}:/repo" homelab-ci python /repo/script/ci/validate.py
+
+      - name: Compose schema validation
+        run: docker run --rm -v "${{ github.workspace }}:/repo" homelab-ci /repo/script/ci/check-compose.sh
+
+      - name: Secret scan
+        run: >-
+          docker run --rm -v "${{ github.workspace }}:/repo" homelab-ci
+          bash -lc 'git config --global --add safe.directory /repo
+          && gitleaks detect --source=/repo --config=/repo/.gitleaks.toml
+          --no-banner --redact -v'

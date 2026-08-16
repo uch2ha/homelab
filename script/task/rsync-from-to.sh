@@ -21,18 +21,6 @@ DRY_RUN_CHANGE_TYPES=">f"
 LOG_DIR="/tmp/rsync-script"
 LOG_FILE=""
 
-# input arguments
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 <source> <destination>" >&2
-  exit 1
-fi
-
-SRC="$1"
-DST="$2"
-
-SRC_NAME="$(basename "$SRC")"
-DST_NAME="$(basename "$DST")"
-
 validate_paths_exist() {
   if [ ! -d "$SRC" ]; then
     echo -e "${RED}ERROR: source does not exist or is not a directory: $SRC${NC}" >&2
@@ -113,7 +101,6 @@ _dry_run_collect(){
 
   set +e
   RAW="$(rsync $RSYNC_FLAGS_DRYRUN --dry-run "$SRC" "$DST" 2>&1)"
-  DRY_EXIT=$?
   set -e
 
   echo "─── dry-run (full) ───" >> "$LOG_FILE"
@@ -209,4 +196,18 @@ main() {
   print_folder_sizes
 }
 
-main
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  # input arguments
+  if [ $# -ne 2 ]; then
+    echo "Usage: $0 <source> <destination>" >&2
+    exit 1
+  fi
+
+  SRC="$1"
+  DST="$2"
+
+  SRC_NAME="$(basename "$SRC")"
+  DST_NAME="$(basename "$DST")"
+
+  main
+fi

@@ -2,6 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=lib/lib.sh
 source "$SCRIPT_DIR/lib/lib.sh"
 
 CONFIG_FILE="$SCRIPT_DIR/config/start-config.yaml"
