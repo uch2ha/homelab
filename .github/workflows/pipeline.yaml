@@ -15,17 +15,21 @@ jobs:
         run: docker build -t homelab-test test/
 
       - name: Run validator tests
-        run: docker run --rm -v "$PWD:/repo" -e CI=true homelab-test \
+        run: >
+          docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
           bash /repo/test/run-tests.sh validator
 
       - name: Run script/task tests
-        run: docker run --rm -v "$PWD:/repo" -e CI=true homelab-test \
+        run: >
+          docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
           bash /repo/test/run-tests.sh script/task
 
       - name: Run BAD tests
-        run: docker run --rm -v "$PWD:/repo" -e CI=true homelab-test \
+        run: >
+          docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
           bash /repo/test/run-tests.sh bad
 
       - name: Run BAD2 tests
-        run: docker run --rm -v "$PWD:/repo" -e CI=true homelab-test \
+        run: >
+          docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
           bash /repo/test/run-tests.sh script/bad2
