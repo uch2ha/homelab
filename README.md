@@ -10,6 +10,7 @@ Personal homelab on a single node. Everything runs as Docker containers.
 - [Services](#services)
 - [Homepage](#homepage)
 - [CI](#ci)
+- [Note](#note)
 - [Roadmap](#roadmap)
 
 ## Network Architecture
@@ -95,6 +96,10 @@ Every PR runs automated checks via [GitHub Actions](.github/workflows/pipeline.y
 - **Testing** — integration & unit tests for scripts
 
 See [`test/`](test/README.md) for details on running tests locally.
+
+## Note
+
+- Designed to be placed at the root of the home directory: `~/homelab`
 
 ## Roadmap
 
