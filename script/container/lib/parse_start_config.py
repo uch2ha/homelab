@@ -1,7 +1,42 @@
 #!/usr/bin/env python3
+
 import sys
 
 import yaml
+
+
+def main():
+    config_path = sys.argv[1]
+    with open(config_path) as f:
+        cfg = yaml.safe_load(f)
+
+    available = {line.strip() for line in sys.stdin if line.strip()}
+
+    action = cfg.get("action", "")
+    base = cfg.get("base", [])
+    groups = cfg.get("groups")
+
+    validate_config_value_types(action, base, groups)
+    validate_base_values(base)
+
+    group_selected_list = generate_group_selected_list(groups)
+    validate_selected_groups_against_base(group_selected_list, base)
+
+    selected = set()
+
+    select_services_from_base(available, base, selected)
+    select_services_from_groups(available, group_selected_list, selected)
+
+    if not selected:
+        print(
+            "ERROR: no services selected — check base/groups in config", file=sys.stderr
+        )
+        sys.exit(1)
+
+    # stdout
+    print(action)
+    for d in sorted(selected):
+        print(d)
 
 
 def validate_config_value_types(action, base, groups):
@@ -121,40 +156,6 @@ def select_services_from_groups(
             )
             sys.exit(1)
         selected.add(full)
-
-
-def main():
-    config_path = sys.argv[1]
-    with open(config_path) as f:
-        cfg = yaml.safe_load(f)
-
-    available = {line.strip() for line in sys.stdin if line.strip()}
-
-    action = cfg.get("action", "")
-    base = cfg.get("base", [])
-    groups = cfg.get("groups")
-
-    validate_config_value_types(action, base, groups)
-    validate_base_values(base)
-
-    group_selected_list = generate_group_selected_list(groups)
-    validate_selected_groups_against_base(group_selected_list, base)
-
-    selected = set()
-
-    select_services_from_base(available, base, selected)
-    select_services_from_groups(available, group_selected_list, selected)
-
-    if not selected:
-        print(
-            "ERROR: no services selected — check base/groups in config", file=sys.stderr
-        )
-        sys.exit(1)
-
-    # stdout
-    print(action)
-    for d in sorted(selected):
-        print(d)
 
 
 if __name__ == "__main__":

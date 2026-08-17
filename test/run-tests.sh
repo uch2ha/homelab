@@ -54,7 +54,7 @@ _run_tests() {
     total=$((total + 1))
     rel="${file#"$ROOT_DIR"/}"
 
-    echo -e "${MAIN}==> running test ${rel}${NC}"
+    echo -e "${MAIN}==> running ${rel}${NC}"
     if ! _run_test_file "$file"; then
       failed+=("$rel")
     fi
