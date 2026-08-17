@@ -1,12 +1,15 @@
 # homelab
 
-Personal homelab on a single server. Everything runs as Docker containers.
+[![CI](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml)
+
+Personal homelab on a single node. Everything runs as Docker containers.
 
 ## Sections
 
 - [Network Architecture](#network-architecture)
 - [Services](#services)
 - [Homepage](#homepage)
+- [CI](#ci)
 - [Roadmap](#roadmap)
 
 ## Network Architecture
@@ -82,6 +85,16 @@ Two ways to access services:
 ## Homepage
 
 ![Glance Homepage](assets/screenshots/homepage.webp)
+
+## CI
+
+Every PR runs automated checks via [GitHub Actions](.github/workflows/pipeline.yaml):
+
+- **Secret scan** — gitleaks detects leaked credentials before merge
+- **Linting** — shell (`bash -n` + `shellcheck`), YAML parse, Python (`ruff`)
+- **Testing** — integration & unit tests for scripts
+
+See [`test/`](test/README.md) for details on running tests locally.
 
 ## Roadmap
 
