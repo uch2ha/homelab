@@ -22,6 +22,7 @@ tool/ntfy/*
 __pycache__/
 
 # global
+*temp/*
 *.env*
 **/private/
 !*docker-compose.yaml
