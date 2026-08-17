@@ -7,8 +7,18 @@ on:
 jobs:
   main:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # allow checkout
+      security-events: write # gitleaks SARIF upload
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # full git history for gitleaks
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build homelab-test image
         run: docker build -t homelab-test test/
@@ -22,3 +32,8 @@ jobs:
         run: >
           docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
           bash /repo/test/run-tests.sh script/task
+
+      - name: Run script/container tests
+        run: >
+          docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
+          bash /repo/test/run-tests.sh script/container
