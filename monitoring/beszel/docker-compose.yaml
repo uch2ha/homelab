@@ -10,8 +10,9 @@ services:
       - ./beszel_socket:/beszel_socket
     networks:
       - homelab_monitoring
-    ports:
-      - 8090:8090
+    # ports:
+    #   - 8090:8090
+    # -
 
   beszel-agent:
     image: henrygd/beszel-agent:${VERSION}
@@ -20,7 +21,7 @@ services:
     network_mode: host
     environment:
       LISTEN: /beszel_socket/beszel.sock
-      HUB_URL: http://127.0.0.1:8090
+      HUB_URL: ${APP_URL}
       TOKEN: ${TOKEN}
       KEY: ${KEY}
     volumes:
@@ -28,8 +29,8 @@ services:
       - ./beszel_socket:/beszel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /home:/extra-filesystems/home__home:ro
-      - /mnt/hdd-main:/extra-filesystems/hdd__hdd-main:ro
-      - /mnt/ssd-backup:/extra-filesystems/ssd__ssd-backup:ro
+      - ${MAIN_1}:/extra-filesystems/hdd__hdd-main:ro
+      - ${BACKUP_1}:/extra-filesystems/ssd__ssd-backup:ro
 
 networks:
   homelab_monitoring:

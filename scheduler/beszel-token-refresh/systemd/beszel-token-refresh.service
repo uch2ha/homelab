@@ -1,0 +1,6 @@
+[Unit]
+Description=Refresh Beszel token for Glance dashboard
+
+[Service]
+Type=oneshot
+ExecStart=%h/homelab/scheduler/beszel-token-refresh/refresh.sh

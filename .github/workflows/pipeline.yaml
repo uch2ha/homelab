@@ -37,3 +37,8 @@ jobs:
         run: >
           docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
           bash /repo/test/run-tests.sh script/container
+
+      - name: Run scheduler tests
+        run: >
+          docker run --rm -v "$PWD:/repo" -e CI=true homelab-test
+          bash /repo/test/run-tests.sh scheduler

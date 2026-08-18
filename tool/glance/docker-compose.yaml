@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - .env.beszel-token
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./config:/app/config

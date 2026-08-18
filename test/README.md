@@ -32,6 +32,8 @@ test/
 │   └── validate-yaml.py
 ├── script/task/          # Unit/Integration tests for custom scripts
 │   └── test-rsync-from-to.bats
-└── script/container/     # Unit/Integration tests for service orchestration scripts
-    └── test-parse-start-config.py
+├── script/container/     # Unit/Integration tests for service orchestration scripts
+│   └── test-parse-start-config.py
+└── scheduler/
+    └── test-beszel-token-refresh.bats
 ```
