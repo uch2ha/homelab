@@ -5,7 +5,7 @@ trap 'echo; echo "ABORTED by user"; exit 130' INT
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
-STATE_FILE="${SCRIPT_DIR}/temp/state.txt"
+STATE_FILE="${SCRIPT_DIR}/_temp/state.txt"
 
 TEMPLATE_CRITICAL='Image %s can be updated'
 TEMPLATE_INFO='Image %s can be updated'
@@ -177,6 +177,7 @@ handle_error() {
 load_env() {
   if [[ -f "$ENV_FILE" ]]; then
     set -a
+    # shellcheck source=/dev/null
     source "$ENV_FILE"
     set +a
   else
@@ -274,6 +275,7 @@ read_state() {
 
 write_state() {
   local image="$1" digest="$2"
+  mkdir -p "$(dirname "$STATE_FILE")"
   touch "$STATE_FILE" 2>/dev/null
   sed -i "/^${image}=/d" "$STATE_FILE" 2>/dev/null || true
   echo "${image}=${digest}" >> "$STATE_FILE"
