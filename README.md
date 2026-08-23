@@ -1,6 +1,6 @@
 # homelab
 
-[![CI](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml)
+[![CI](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml/badge.svg?branch=main)](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml)
 
 Personal homelab on a single node. Everything runs as Docker containers.
 
