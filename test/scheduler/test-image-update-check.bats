@@ -6,9 +6,9 @@ setup() {
   SCRIPT_DIR="$BATS_TEST_TMPDIR/repo/scheduler/image-update-check"
   BIN="$BATS_TEST_TMPDIR/bin"
   NTFY_LOG="$BATS_TEST_TMPDIR/ntfy.log"
-  STATE_FILE="$SCRIPT_DIR/temp/state.txt"
+  STATE_FILE="$SCRIPT_DIR/_temp/state.txt"
 
-  mkdir -p "$SCRIPT_DIR/temp" "$BIN"
+  mkdir -p "$SCRIPT_DIR/_temp" "$BIN"
 
   cp "$REPO_ROOT/scheduler/image-update-check/check-updates.sh" "$SCRIPT_DIR/check-updates.sh"
 
