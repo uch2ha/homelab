@@ -13,12 +13,24 @@ Checks running containers against registry tags and sends ntfy notifications whe
 
 ## Env Config
 
-|                       |                                                    |
-| --------------------- | -------------------------------------------------- |
-| `CMD`                 | `docker` or `podman`                               |
-| `SERVER_NAME`         | Identifies notifications per machine               |
-| `NTFY_*`              | Base URL, topics, and priority levels              |
-| `CRITICAL_CONTAINERS` | Comma-separated container names that always notify |
+<table>
+  <tr>
+    <td><code>CMD</code></td>
+    <td><code>docker</code> or <code>podman</code></td>
+  </tr>
+  <tr>
+    <td><code>SERVER_NAME</code></td>
+    <td>Identifies notifications per machine</td>
+  </tr>
+  <tr>
+    <td><code>NTFY_*</code></td>
+    <td>Base URL, topics, and priority levels</td>
+  </tr>
+  <tr>
+    <td><code>CRITICAL_CONTAINERS</code></td>
+    <td>Comma-separated container names that always notify</td>
+  </tr>
+</table>
 
 ## Systemd
 
