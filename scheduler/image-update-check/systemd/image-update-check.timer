@@ -1,0 +1,10 @@
+[Unit]
+Description=Run daily container image update check
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=image-update-check.service
+
+[Install]
+WantedBy=timers.target

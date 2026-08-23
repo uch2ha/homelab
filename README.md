@@ -1,6 +1,6 @@
 # homelab
 
-[![CI](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml)
+[![CI](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml/badge.svg?branch=main)](https://github.com/uch2ha/homelab/actions/workflows/pipeline.yaml)
 
 Personal homelab on a single node. Everything runs as Docker containers.
 
@@ -10,6 +10,7 @@ Personal homelab on a single node. Everything runs as Docker containers.
 - [Services](#services)
 - [Homepage](#homepage)
 - [CI](#ci)
+- [Scheduler](#scheduler)
 - [Note](#note)
 - [Roadmap](#roadmap)
 
@@ -96,6 +97,15 @@ Every PR runs automated checks via [GitHub Actions](.github/workflows/pipeline.y
 - **Testing** — integration & unit tests for scripts
 
 See [`test/`](test/README.md) for details on running tests locally.
+
+## Scheduler
+
+Systemd-timer-driven bash scripts for periodic automation. See [`scheduler/`](scheduler/README.md).
+
+|                         |                    |                                                       |
+| ----------------------- | ------------------ | ----------------------------------------------------- |
+| `beszel-token-refresh/` | Weekly (Mon 02:00) | Refresh Beszel API token for Glance dashboard         |
+| `image-update-check/`   | Daily              | Check for container image updates and notify via ntfy |
 
 ## Note
 

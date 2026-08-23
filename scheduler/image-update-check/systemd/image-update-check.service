@@ -1,0 +1,6 @@
+[Unit]
+Description=Check container image updates and notify via ntfy
+
+[Service]
+Type=oneshot
+ExecStart=%h/homelab/scheduler/image-update-check/check-updates.sh
