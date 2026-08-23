@@ -102,10 +102,18 @@ See [`test/`](test/README.md) for details on running tests locally.
 
 Systemd-timer-driven bash scripts for periodic automation. See [`scheduler/`](scheduler/README.md).
 
-|                         |                    |                                                       |
-| ----------------------- | ------------------ | ----------------------------------------------------- |
-| `beszel-token-refresh/` | Weekly (Mon 02:00) | Refresh Beszel API token for Glance dashboard         |
-| `image-update-check/`   | Daily              | Check for container image updates and notify via ntfy |
+<table>
+  <tr>
+    <td><code>beszel-token-refresh/</code></td>
+    <td>Weekly (Mon 02:00)</td>
+    <td>Refresh Beszel API token for Glance dashboard</td>
+  </tr>
+  <tr>
+    <td><code>image-update-check/</code></td>
+    <td>Daily</td>
+    <td>Check for container image updates and notify via ntfy</td>
+  </tr>
+</table>
 
 ## Note
 
