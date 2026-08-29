@@ -1,6 +1,6 @@
 - type: custom-api
   title: Immich
-  cache: 1h
+  cache: 6h
   url: ${IMMICH_URL}/api/server/statistics
   headers:
     x-api-key: ${IMMICH_KEY}
@@ -72,7 +72,7 @@
         {{ $hasQuota := gt $quotaBytes 0 }}
         {{ $quotaPercent := 0.0 }}
         {{ $quotaPercentColor := "" }}
-        
+
         {{ if $hasQuota }}
           {{ $quotaPercent = mul (div ($userUsageBytes | toFloat) ($quotaBytes | toFloat)) 100.0 }}
 
