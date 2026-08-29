@@ -7,8 +7,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
 STATE_FILE="${SCRIPT_DIR}/_temp/state.txt"
 
-TEMPLATE_CRITICAL='Image %s can be updated'
-TEMPLATE_INFO='Image %s can be updated'
+TEMPLATE_CRITICAL_TITLE='(Critical) %s update available' # serviceName
+TEMPLATE_CRITICAL_MSG='[%s]: %s -> %s' # imageName, currentTimestamp, newTimestamp
+TEMPLATE_INFO_TITLE='%s update available' # serviceName
+TEMPLATE_INFO_MSG='[%s]: %s -> %s' # imageName, currentTimestamp, newTimestamp
 TEMPLATE_FAILURE='Failed to check updates for %s — %s'
 TEMPLATE_ERROR='Container runtime (%s) not found — update checks disabled'
 
@@ -66,17 +68,25 @@ handle_single_container() {
 
   echo -e "${MAIN}CHECK $name → $base${NC}"
 
-  local latest_tag old_latest_id
-  pull_latest_and_get_old_latest_id "$name" "$base" || { echo; return; }
+  local latest_tag
+  latest_tag="latest"
 
-  local running_id new_latest_id
-  extract_running_and_new_latest_ids "$name" "$base" || { echo; return; }
+  local running_id old_latest_id
+  extract_running_and_old_latest_ids "$name" "$base" || { echo; return; }
+
+  local new_latest_id
+  pull_latest_and_get_new_latest_id "$name" "$base" || { echo; return; }
+
+  local running_created new_created
+  running_created="$(get_image_created "$running_id")"
+  new_created="$(get_image_created "$new_latest_id")"
+  local image_ref="${base}:${latest_tag}"
 
   if [[ "$running_id" != "$new_latest_id" ]]; then
     if is_container_critical "$name"; then
-      handle_critical_notification "$name" "$base"
+      handle_critical_notification "$name" "$image_ref" "$running_created" "$new_created"
     else
-      handle_info_notification_and_state_update "$name" "$base" "$new_latest_id"
+      handle_info_notification_and_state_update "$name" "$image_ref" "$new_latest_id" "$running_created" "$new_created"
     fi
   fi
 
@@ -84,32 +94,7 @@ handle_single_container() {
   echo
 }
 
-pull_latest_and_get_old_latest_id() {
-  local name="$1" base="$2"
-
-  latest_tag="latest"
-
-  pull_image "$base" "$latest_tag"
-  old_latest_id="$(get_latest_image_id "$base" "$latest_tag")"
-
-  if [[ -z "$old_latest_id" ]]; then
-    local image_ref container_tag
-    image_ref="$(get_container_image_ref "$name")"
-    container_tag="${image_ref##*:}"
-    [[ "$container_tag" == "$image_ref" ]] && container_tag="latest"
-    latest_tag="$container_tag"
-
-    pull_image "$base" "$latest_tag"
-    old_latest_id="$(get_latest_image_id "$base" "$latest_tag")"
-  fi
-
-  if [[ -z "$old_latest_id" ]]; then
-    handle_error "$name" "Failed to pull image (tried :latest, then :${container_tag})"
-    return 1
-  fi
-}
-
-extract_running_and_new_latest_ids() {
+extract_running_and_old_latest_ids() {
   local name="$1" base="$2"
 
   running_id="$(get_container_image_id "$name")"
@@ -119,36 +104,66 @@ extract_running_and_new_latest_ids() {
     return 1
   fi
 
+  old_latest_id="$(get_latest_image_id "$base" "$latest_tag")"
+}
+
+pull_latest_and_get_new_latest_id() {
+  local name="$1" base="$2"
+
+  if is_pinned_tag_container "$name"; then
+    local image_ref container_tag
+    image_ref="$(get_container_image_ref "$name")"
+    container_tag="${image_ref##*:}"
+    [[ "$container_tag" == "$image_ref" ]] && container_tag="latest"
+    latest_tag="$container_tag"
+  fi
+
+  pull_image "$base" "$latest_tag"
   new_latest_id="$(get_latest_image_id "$base" "$latest_tag")"
 
   if [[ -z "$new_latest_id" ]]; then
-    handle_error "$name" "Failed to inspect pulled image"
+    local image_ref container_tag
+    image_ref="$(get_container_image_ref "$name")"
+    container_tag="${image_ref##*:}"
+    [[ "$container_tag" == "$image_ref" ]] && container_tag="latest"
+    latest_tag="$container_tag"
+
+    pull_image "$base" "$latest_tag"
+    new_latest_id="$(get_latest_image_id "$base" "$latest_tag")"
+  fi
+
+  if [[ -z "$new_latest_id" ]]; then
+    handle_error "$name" "Failed to pull image"
     return 1
   fi
 }
 
 handle_critical_notification() {
-  local name="$1" base="$2"
-  local msg
-  msg="$(printf "$TEMPLATE_CRITICAL" "${base}")"
-  echo -e "${ORANGE}UPDATE${RED} CRITICAL${NC} — $name ($base)"
-  send_ntfy "$NTFY_TOPIC_CRITICAL" "Critical update available" "$msg" "$NTFY_CRITICAL_PRIORITY"
+  local name="$1" image_ref="$2" running_created="$3" new_created="$4"
+  local msg title
+  title="$(printf "$TEMPLATE_CRITICAL_TITLE" "$name")"
+  msg="$(printf "$TEMPLATE_CRITICAL_MSG" "$image_ref" "$running_created" "$new_created")"
+  echo -e "${ORANGE}UPDATE${RED} CRITICAL${NC} — $name ($image_ref) ($running_created -> $new_created)"
+  send_ntfy "$NTFY_TOPIC_CRITICAL" "$title" "$msg" "$NTFY_CRITICAL_PRIORITY"
 }
 
 handle_info_notification_and_state_update() {
-  local name="$1" base="$2" new_id="$3"
+  local name="$1" image_ref="$2" new_id="$3" running_created="$4" new_created="$5"
+
+  local base="${image_ref%:*}"
 
   local known
   known="$(read_state "$base")"
   if [[ "$known" == "$new_id" ]]; then
-    echo -e "${ORANGE}SKIP UPDATE INFO${NC} — $name ($base) — already notified for this version"
+    echo -e "${ORANGE}SKIP UPDATE INFO${NC} — $name ($image_ref) ($running_created -> $new_created) — already notified for this version"
     return
   fi
 
-  local msg
-  msg="$(printf "$TEMPLATE_INFO" "${base}")"
-  echo -e "${ORANGE}UPDATE${MAIN} INFO${NC} — $name ($base)"
-  send_ntfy "$NTFY_TOPIC_INFO" "Update available" "$msg" "$NTFY_INFO_PRIORITY"
+  local msg title
+  title="$(printf "$TEMPLATE_INFO_TITLE" "$name")"
+  msg="$(printf "$TEMPLATE_INFO_MSG" "$image_ref" "$running_created" "$new_created")"
+  echo -e "${ORANGE}UPDATE${MAIN} INFO${NC} — $name ($image_ref) ($running_created -> $new_created)"
+  send_ntfy "$NTFY_TOPIC_INFO" "$title" "$msg" "$NTFY_INFO_PRIORITY"
   write_state "$base" "$new_id"
 }
 
@@ -212,7 +227,16 @@ is_container_critical() {
   local name="$1"
   local IFS=','
   for c in $CRITICAL_CONTAINERS; do
-    [[ "$name" == "$c" ]] && return 0
+    [[ "$name" == *"$c"* ]] && return 0
+  done
+  return 1
+}
+
+is_pinned_tag_container() {
+  local name="$1"
+  local IFS=','
+  for c in $PINNED_TAG_CONTAINERS; do
+    [[ "$name" == *"$c"* ]] && return 0
   done
   return 1
 }
@@ -238,6 +262,11 @@ pull_image() {
   $CMD pull --quiet "${base}:${tag}" 2>/dev/null | sed 's/^/---/' || true
 }
 
+get_image_created() {
+  local id="$1"
+  $CMD image inspect --format '{{.Created}}' "$id" 2>/dev/null | cut -d. -f1 | cut -dT -f1 || echo "unknown"
+}
+
 get_latest_image_id() {
   local base="$1" tag="$2"
   $CMD inspect --format '{{.Id}}' "${base}:${tag}" 2>/dev/null || true
@@ -246,8 +275,8 @@ get_latest_image_id() {
 cleanup_latest_image(){
   local base="$1" new_id="$2" old_id="$3" tag="$4"
   [[ "$old_id" == "$new_id" ]] && return
-  remove_image "$new_id"
   [[ -n "$old_id" ]] && reset_latest_tag "$base" "$old_id" "$tag"
+  remove_image "$new_id"
 }
 
 remove_image() {

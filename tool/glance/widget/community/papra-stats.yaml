@@ -4,7 +4,7 @@
   headers:
     Authorization: Bearer ${API_KEY}
     Accept: application/json
-  cache: 1h
+  cache: 6h
   subrequests:
     documents-list:
       url: https://${PAPRA_URL}/api/organizations/${ORGANISATION_ID}/documents
