@@ -110,6 +110,14 @@ extract_running_and_old_latest_ids() {
 pull_latest_and_get_new_latest_id() {
   local name="$1" base="$2"
 
+  if is_pinned_tag_container "$name"; then
+    local image_ref container_tag
+    image_ref="$(get_container_image_ref "$name")"
+    container_tag="${image_ref##*:}"
+    [[ "$container_tag" == "$image_ref" ]] && container_tag="latest"
+    latest_tag="$container_tag"
+  fi
+
   pull_image "$base" "$latest_tag"
   new_latest_id="$(get_latest_image_id "$base" "$latest_tag")"
 
@@ -219,6 +227,15 @@ is_container_critical() {
   local name="$1"
   local IFS=','
   for c in $CRITICAL_CONTAINERS; do
+    [[ "$name" == *"$c"* ]] && return 0
+  done
+  return 1
+}
+
+is_pinned_tag_container() {
+  local name="$1"
+  local IFS=','
+  for c in $PINNED_TAG_CONTAINERS; do
     [[ "$name" == *"$c"* ]] && return 0
   done
   return 1
